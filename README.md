@@ -9,8 +9,8 @@ Este aplicativo funciona como una herramienta que realiza contacto vía correo e
 
 ## Despliegue
 
-[nodemailerApp](https://nodemailer-liart.vercel.app/)
-[nodemaileBackend](https://backend-nodemailer.onrender.com/)
+- [nodemailerApp](https://nodemailer-liart.vercel.app/)
+- [nodemaileBackend](https://backend-nodemailer.onrender.com/)
 
 ### Las herramientas empleadas fueron: 
 - Para la creación y funcionalidad del proyecto: Vite + React js y redux.
