@@ -4,6 +4,7 @@ import "./ContactForm.scss";
 import dataForm from "../../data/dataForm";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -24,7 +25,8 @@ const SignupSchema = Yup.object().shape({
 });
 
 const ContactForm = () => {
-  let disabled = false;
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <>
       <Formik
@@ -37,38 +39,43 @@ const ContactForm = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
-          disabled = true;
-          const response = await axios.post(
-            "https://backend-nodemailer.onrender.com/sendEmail",
-            values
-          );
-          const { data } = response;
-          if (data.status === 200) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Mensaje enviado correctamente",
-              showConfirmButton: true,
-              customClass: {
-                container: "custom-swal-container", // Clase personalizada para la alerta
-              },
-            }).then(() => {
-              window.location.reload();
-              disabled = false;
-            });
-          } else {
-            Swal.fire({
-              position: "center",
-              icon: "error",
-              title: "Error al enviar el mensaje",
-              showConfirmButton: true,
-              customClass: {
-                container: "custom-swal-container", // Clase personalizada para la alerta
-              },
-            }).then(() => {
-              window.location.reload();
-              disabled = false;
-            });
+          try {
+            setIsLoading(true);
+
+            const response = await axios.post(
+              "https://backend-nodemailer.onrender.com/sendEmail",
+              values
+            );
+
+            const { data } = response;
+
+            if (data.status === 200) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Mensaje enviado correctamente",
+                showConfirmButton: true,
+                customClass: {
+                  container: "custom-swal-container",
+                },
+              }).then(() => {
+                window.location.reload();
+              });
+            } else {
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error al enviar el mensaje",
+                showConfirmButton: true,
+                customClass: {
+                  container: "custom-swal-container",
+                },
+              });
+            }
+          } catch (error) {
+            console.error("Error en la petición:", error);
+          } finally {
+            setIsLoading(false);
           }
         }}
       >
@@ -93,8 +100,8 @@ const ContactForm = () => {
                 ) : null}
               </div>
             ))}
-            <button type="submit" className="form__submit" disabled={disabled}>
-              Enviar
+            <button type="submit" className="form__submit" disabled={isLoading}>
+              {isLoading ? "Enviando..." : "Enviar"}
             </button>
           </Form>
         )}
