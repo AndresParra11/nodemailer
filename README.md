@@ -1,7 +1,7 @@
 # Prueba Técnica urbanik-hub
 
 ## Autores:
-- [Andres Parra](https://github.com/AndresParra11)
+- [Andrés Parra](https://github.com/AndresParra11)
 
   
 ## Descripción: 
